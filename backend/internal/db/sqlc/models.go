@@ -105,6 +105,12 @@ type SiteSetting struct {
 	ContactEmail      string             `json:"contact_email"`
 	UpdatedAt         pgtype.Timestamptz `json:"updated_at"`
 	HeroVideoUrl      string             `json:"hero_video_url"`
+	Philosophy1Title  string             `json:"philosophy_1_title"`
+	Philosophy1Body   string             `json:"philosophy_1_body"`
+	Philosophy2Title  string             `json:"philosophy_2_title"`
+	Philosophy2Body   string             `json:"philosophy_2_body"`
+	Philosophy3Title  string             `json:"philosophy_3_title"`
+	Philosophy3Body   string             `json:"philosophy_3_body"`
 }
 
 type Subscriber struct {

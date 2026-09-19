@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api, ApiError } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
+import { DEMO_COURSE_THUMBNAIL } from "@/lib/demo-content";
 
 type Chapter = { id: string; title: string; position: number };
 type Course = {
@@ -32,6 +33,20 @@ export default function Courses() {
   const [enrolling, setEnrolling] = useState<string | null>(null);
   const [actionError, setActionError] = useState("");
   const [enrolledIds, setEnrolledIds] = useState<Set<string>>(new Set());
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [atStart, setAtStart] = useState(true);
+  const [atEnd, setAtEnd] = useState(false);
+
+  function scrollByCards(direction: 1 | -1) {
+    scrollerRef.current?.scrollBy({ left: direction * 360, behavior: "smooth" });
+  }
+
+  function updateScrollEdges() {
+    const el = scrollerRef.current;
+    if (!el) return;
+    setAtStart(el.scrollLeft <= 4);
+    setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
+  }
 
   useEffect(() => {
     api
@@ -41,6 +56,10 @@ export default function Courses() {
         setLoadError(err instanceof ApiError ? err.message : "Could not load courses right now.")
       );
   }, []);
+
+  useEffect(() => {
+      updateScrollEdges();
+  }, [courses]);
 
   useEffect(() => {
     if (!user) {
@@ -53,7 +72,7 @@ export default function Courses() {
       .catch(() => {});
   }, [user]);
 
-  function handlePreviewClick(course: Course) {
+   function handlePreviewClick(course: Course) {
     if (!user) {
       router.push("/signup");
       return;
@@ -91,14 +110,39 @@ export default function Courses() {
 
   return (
     <section id="courses" className="max-w-6xl mx-auto px-6 py-24">
-      <p className="text-sm tracking-wide text-accent-light mb-3">Our courses</p>
-      <h2 className="font-display text-3xl md:text-4xl max-w-xl">
-        Deepen your faith and understanding
-      </h2>
-      <p className="mt-4 max-w-prose text-stone dark:text-stone-light">
-        Learn at your own pace through structured, biblically grounded
-        courses taught by Akintola Samuel.
-      </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-sm tracking-wide text-accent-light mb-3">Our courses</p>
+          <h2 className="font-display text-3xl md:text-4xl max-w-xl">
+            Deepen your faith and understanding
+          </h2>
+          <p className="mt-4 max-w-prose text-stone dark:text-stone-light">
+            Learn at your own pace through structured, biblically grounded
+            courses taught by Akintola Samuel.
+          </p>
+        </div>
+
+        {courses && courses.length > 3 && (
+          <div className="hidden sm:flex gap-2 shrink-0 mt-1">
+            <button
+              onClick={() => scrollByCards(-1)}
+              disabled={atStart}
+              aria-label="Scroll courses left"
+              className="w-9 h-9 rounded-full border border-current/20 hover:border-accent-light flex items-center justify-center transition-colors disabled:opacity-30 disabled:hover:border-current/20"
+            >
+              ‹
+            </button>
+            <button
+              onClick={() => scrollByCards(1)}
+              disabled={atEnd}
+              aria-label="Scroll courses right"
+              className="w-9 h-9 rounded-full border border-current/20 hover:border-accent-light flex items-center justify-center transition-colors disabled:opacity-30 disabled:hover:border-current/20"
+            >
+              ›
+            </button>
+          </div>
+        )}
+      </div>
 
       {loadError && <p className="mt-10 text-sm text-wax">{loadError}</p>}
 
@@ -127,20 +171,28 @@ export default function Courses() {
 
       {courses && courses.length > 0 && (
         <>
-          <div className="mt-12 grid md:grid-cols-3 gap-px bg-current/10">
-            {courses.map((course) => (
-              <div key={course.id} className="bg-parchment dark:bg-ink">
-                {course.thumbnail_url ? (
-                    <img
-                    src={course.thumbnail_url}
-                    alt={course.title}
-                    className="w-full aspect-video object-cover"
-                  />
-                ) : (
-                  <div className="w-full aspect-video bg-parchment-raised dark:bg-ink-raised" />
-                )}
+          <div
+            ref={scrollerRef}
+            onScroll={updateScrollEdges}
+            className="mt-12 flex gap-px bg-current/10 overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
+            style={{ scrollbarWidth: "none" }}
+          >
+            {courses.map((course, i) => (
+              <div
+                key={course.id}
+                className="bg-parchment dark:bg-ink shrink-0 w-[85%] sm:w-[340px] snap-start"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={course.thumbnail_url || DEMO_COURSE_THUMBNAIL}
+                  alt={course.title}
+                  className="w-full aspect-video object-cover"
+                />
 
                 <div className="p-6">
+                  <p className="text-xs tracking-wide text-stone dark:text-stone-light mb-2">
+                    COURSE {String(i + 1).padStart(2, "0")}
+                  </p>
                   <h3 className="font-display text-xl mb-2">{course.title}</h3>
                   <p className="text-sm text-stone dark:text-stone-light mb-4">
                     {course.summary}

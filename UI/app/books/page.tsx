@@ -7,6 +7,7 @@ import { api, ApiError } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { DEMO_BOOK_COVER } from "@/lib/demo-content";
 
 type Book = {
   id: string;
@@ -93,15 +94,12 @@ export default function BooksPage() {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
             {books.map((book) => (
               <div key={book.id} className="rounded-lg overflow-hidden border border-current/10">
-                {book.cover_image_url ? (
-                    <img
-                    src={book.cover_image_url}
-                    alt={book.title}
-                    className="w-full aspect-[3/4] object-cover"
-                  />
-                ) : (
-                  <div className="w-full aspect-[3/4] bg-parchment-raised dark:bg-ink-raised" />
-                )}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={book.cover_image_url || DEMO_BOOK_COVER}
+                  alt={book.title}
+                  className="w-full aspect-[3/4] object-cover"
+                />
                 <div className="p-5">
                   <h3 className="font-display text-lg mb-1">{book.title}</h3>
                   <p className="text-xs text-stone dark:text-stone-light mb-3">{book.author}</p>

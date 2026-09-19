@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { api } from "@/lib/api";
 import { forceDownloadUrl } from "@/lib/cloudinary";
 import { useAuth } from "@/contexts/AuthContext";
+import { DEMO_BOOK_COVER } from "@/lib/demo-content";
 
 type Book = {
   id: string;
@@ -52,15 +53,11 @@ export default function MyBooksPage() {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
             {books.map((book) => (
               <div key={book.id} className="rounded-lg overflow-hidden border border-current/10">
-                {book.cover_image_url ? (
-                     <img
-                    src={book.cover_image_url}
-                    alt={book.title}
-                    className="w-full aspect-[3/4] object-cover"
-                  />
-                ) : (
-                  <div className="w-full aspect-[3/4] bg-parchment-raised dark:bg-ink-raised" />
-                )}
+                   <img
+                  src={book.cover_image_url || DEMO_BOOK_COVER}
+                  alt={book.title}
+                  className="w-full aspect-[3/4] object-cover"
+                />
                 <div className="p-5">
                   <h3 className="font-display text-lg mb-1">{book.title}</h3>
                   <p className="text-xs text-stone dark:text-stone-light mb-4">{book.author}</p>

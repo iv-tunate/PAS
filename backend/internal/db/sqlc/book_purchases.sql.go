@@ -123,9 +123,6 @@ WHERE bp.user_id = $1 AND bp.status = 'success'
 ORDER BY bp.created_at DESC
 `
 
-// What a signed-in buyer sees in "My books" — only successful purchases,
-// joined with the book itself so the frontend gets title/cover/file in
-// one call.
 func (q *Queries) ListMyPurchasedBooks(ctx context.Context, userID uuid.UUID) ([]Book, error) {
 	rows, err := q.db.Query(ctx, listMyPurchasedBooks, userID)
 	if err != nil {

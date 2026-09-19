@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
+import { DEMO_BOOK_COVER } from "@/lib/demo-content";
 
 type Book = {
   id: string;
@@ -24,7 +25,7 @@ export default function Books() {
   }, []);
 
   if (books && books.length === 0 && user?.role !== "admin") {
-       return null;
+    return null;
   }
 
   return (
@@ -63,15 +64,11 @@ export default function Books() {
                 href="/books"
                 className="group block rounded-lg overflow-hidden border border-current/10 hover:border-accent-light transition-colors"
               >
-                {book.cover_image_url ? (
-                  <img
-                    src={book.cover_image_url}
-                    alt={book.title}
-                    className="w-full aspect-[3/4] object-cover"
-                  />
-                ) : (
-                  <div className="w-full aspect-[3/4] bg-parchment-raised dark:bg-ink-raised" />
-                )}
+                   <img
+                  src={book.cover_image_url || DEMO_BOOK_COVER}
+                  alt={book.title}
+                  className="w-full aspect-[3/4] object-cover"
+                />
                 <div className="p-4">
                   <h3 className="font-display text-base group-hover:text-accent-light transition-colors">
                     {book.title}

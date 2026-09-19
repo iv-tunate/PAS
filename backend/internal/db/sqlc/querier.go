@@ -44,9 +44,6 @@ type Querier interface {
 	// Admin: paginated purchase log across all three gateways.
 	ListBookPurchases(ctx context.Context, arg ListBookPurchasesParams) ([]BookPurchase, error)
 	ListChaptersByCourse(ctx context.Context, courseID uuid.UUID) ([]CourseChapter, error)
-	// What a signed-in buyer sees in "My books" — only successful purchases,
-	// joined with the book itself so the frontend gets title/cover/file in
-	// one call.
 	ListMyPurchasedBooks(ctx context.Context, userID uuid.UUID) ([]Book, error)
 	// Admin: paginated payment log.
 	ListPayments(ctx context.Context, arg ListPaymentsParams) ([]Payment, error)

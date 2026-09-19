@@ -39,3 +39,4 @@ dist-ssr
 *.sw?
 .env
 backend/Makefile
+.next

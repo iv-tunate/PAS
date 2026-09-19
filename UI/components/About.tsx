@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
+import { DEMO_PASTOR_PHOTO } from "@/lib/demo-content";
 
 type Settings = {
   pastor_name: string;
@@ -22,8 +23,7 @@ export default function About() {
   const [settings, setSettings] = useState<Settings | null>(null);
 
   useEffect(() => {
-    api.get<Settings>("/settings").then(setSettings).catch(() => {
-   });
+    api.get<Settings>("/settings").then(setSettings).catch(() => {  });
   }, []);
 
   if (!settings) return null;
@@ -39,17 +39,11 @@ export default function About() {
       <p className="text-sm tracking-wide text-accent mb-3">Meet your guide</p>
       <div className="grid md:grid-cols-[minmax(0,320px)_1fr] gap-12">
         <div>
-          {settings.pastor_photo_url ? (
-              <img
-              src={settings.pastor_photo_url}
-              alt={settings.pastor_name}
-              className="aspect-[4/5] rounded-lg object-cover w-full"
-            />
-          ) : (
-            <div className="aspect-[4/5] rounded-lg bg-parchment-raised dark:bg-ink-raised flex items-center justify-center text-stone dark:text-stone-light text-sm">
-              Photo coming soon
-            </div>
-          )}
+           <img
+            src={settings.pastor_photo_url || DEMO_PASTOR_PHOTO}
+            alt={settings.pastor_name}
+            className="aspect-[4/5] rounded-lg object-cover w-full"
+          />
           <div className="mt-8 grid grid-cols-3 gap-4">
             {stats.map((s) => (
               <div key={s.label}>

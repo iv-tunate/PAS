@@ -10,7 +10,7 @@ import (
 )
 
 const getSiteSettings = `-- name: GetSiteSettings :one
-SELECT id, pastor_name, pastor_bio, pastor_photo_url, campuses_count, years_leadership, continents_reached, books_url, website_url, contact_email, updated_at, hero_video_url FROM site_settings WHERE id = TRUE
+SELECT id, pastor_name, pastor_bio, pastor_photo_url, campuses_count, years_leadership, continents_reached, books_url, website_url, contact_email, updated_at, hero_video_url, philosophy_1_title, philosophy_1_body, philosophy_2_title, philosophy_2_body, philosophy_3_title, philosophy_3_body FROM site_settings WHERE id = TRUE
 `
 
 func (q *Queries) GetSiteSettings(ctx context.Context) (SiteSetting, error) {
@@ -29,6 +29,12 @@ func (q *Queries) GetSiteSettings(ctx context.Context) (SiteSetting, error) {
 		&i.ContactEmail,
 		&i.UpdatedAt,
 		&i.HeroVideoUrl,
+		&i.Philosophy1Title,
+		&i.Philosophy1Body,
+		&i.Philosophy2Title,
+		&i.Philosophy2Body,
+		&i.Philosophy3Title,
+		&i.Philosophy3Body,
 	)
 	return i, err
 }
@@ -47,7 +53,7 @@ UPDATE site_settings SET
     hero_video_url = $10,
     updated_at = now()
 WHERE id = TRUE
-RETURNING id, pastor_name, pastor_bio, pastor_photo_url, campuses_count, years_leadership, continents_reached, books_url, website_url, contact_email, updated_at, hero_video_url
+RETURNING id, pastor_name, pastor_bio, pastor_photo_url, campuses_count, years_leadership, continents_reached, books_url, website_url, contact_email, updated_at, hero_video_url, philosophy_1_title, philosophy_1_body, philosophy_2_title, philosophy_2_body, philosophy_3_title, philosophy_3_body
 `
 
 type UpdateSiteSettingsParams struct {
@@ -90,6 +96,12 @@ func (q *Queries) UpdateSiteSettings(ctx context.Context, arg UpdateSiteSettings
 		&i.ContactEmail,
 		&i.UpdatedAt,
 		&i.HeroVideoUrl,
+		&i.Philosophy1Title,
+		&i.Philosophy1Body,
+		&i.Philosophy2Title,
+		&i.Philosophy2Body,
+		&i.Philosophy3Title,
+		&i.Philosophy3Body,
 	)
 	return i, err
 }

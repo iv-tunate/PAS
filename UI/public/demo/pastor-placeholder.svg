@@ -1,0 +1,15 @@
+<svg width="480" height="600" viewBox="0 0 480 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1B1F26" />
+      <stop offset="100%" stop-color="#14171C" />
+    </linearGradient>
+  </defs>
+  <rect width="480" height="600" fill="url(#bg)" />
+  <!-- generic silhouette — head + shoulders, deliberately abstract, not a real person -->
+  <circle cx="240" cy="230" r="90" fill="#3E6690" fill-opacity="0.35" />
+  <path d="M90 560 C90 430 160 360 240 360 C320 360 390 430 390 560 Z" fill="#3E6690" fill-opacity="0.35" />
+  <text x="240" y="580" text-anchor="middle" font-family="Georgia, serif" font-size="15" fill="#8A8578" letter-spacing="1">
+    Photo coming soon
+  </text>
+</svg>
