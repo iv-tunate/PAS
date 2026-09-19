@@ -6,6 +6,11 @@ run:
 build:
 	go build -o
 
+# The database url here is read from the terminal... not the env file itself
+# To add the database url to the terminal, run
+# export DATABASE_URL= $(grep DATABASE_URL .env | cut -d "=" -f2-) ... This is for gitbash
+# For powershell, 
+# $env:DATABASE_URL=(Get-Content .env | Select-String "DATABASE_URL").ToString().Split("=")[1]
 migrate-up:
 	goose -dir internal/db/migrations postgres "$$DATABASE_URL" up
 
